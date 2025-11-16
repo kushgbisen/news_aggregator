@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Schema - Viva Prep</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 500;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 32px 0 16px;
+            color: #fff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #333;
+            font-size: 14px;
+        }
+
+        th {
+            background: #111;
+            font-weight: 500;
+        }
+
+        td {
+            background: #0a0a0a;
+        }
+
+        pre {
+            background: #111;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #ccc;
+            margin: 8px 0;
+        }
+
+        code {
+            background: #222;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        .query-result {
+            margin: 16px 0;
+            padding: 16px;
+            background: #111;
+            border-radius: 8px;
+        }
+
+        .result {
+            color: #4ade80;
+            font-weight: 500;
+        }
+
+        .schema {
+            background: #111;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #ccc;
+        }
+
+        .nav {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #333;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .nav a:hover {
+            background: #111;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="/">← Back to News</a>
+        </div>
+
+        <h1>Database Schema & Operations (Viva Prep)</h1>
+
+        <h2>📋 Table Schema</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>CID</th>
+                    <th>Column Name</th>
+                    <th>Data Type</th>
+                    <th>Not Null</th>
+                    <th>Default</th>
+                    <th>Primary Key</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for col in columns %}
+                <tr>
+                    <td>{{ col[0] }}</td>
+                    <td><code>{{ col[1] }}</code></td>
+                    <td>{{ col[2] or 'NULL' }}</td>
+                    <td>{{ col[3] }}</td>
+                    <td>{{ col[4] or 'NULL' }}</td>
+                    <td>{{ col[5] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>🏗️ CREATE TABLE Statement</h2>
+        <div class="schema">
+CREATE TABLE news_articles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    feed_type TEXT,
+    link TEXT,
+    description TEXT,
+    date TEXT,
+    image TEXT,
+    publisher TEXT,
+    stocks TEXT,
+    article_id TEXT
+);
+        </div>
+
+        <h2>📊 Sample Data (First 5 Rows)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title (first 50 chars)</th>
+                    <th>Feed Type</th>
+                    <th>Date</th>
+                    <th>Stocks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in sample %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1][:50] }}...</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[5][:10] }}</td>
+                    <td>{{ row[7] or 'NULL' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>🔍 Basic SQL Operations (Viva Questions)</h2>
+        
+        {% for desc, query, result in queries %}
+        <div class="query-result">
+            <h3>{{ desc }}</h3>
+            <pre>{{ query }}</pre>
+            <div class="result">Result: {{ result }}</div>
+        </div>
+        {% endfor %}
+
+        <h2>💡 Common Viva Questions & Answers</h2>
+        
+        <div class="query-result">
+            <h3>Q1: What is the primary key?</h3>
+            <pre>Answer: The 'id' column (INTEGER PRIMARY KEY AUTOINCREMENT)</pre>
+        </div>
+
+        <div class="query-result">
+            <h3>Q2: How many total records?</h3>
+            <pre>SELECT COUNT(*) FROM news_articles;</pre>
+            <div class="result">Result: {{ queries[0][2] }} records</div>
+        </div>
+
+        <div class="query-result">
+            <h3>Q3: Get articles containing 'SBI'</h3>
+            <pre>SELECT title, stocks FROM news_articles WHERE stocks LIKE '%SBI%' LIMIT 3;</pre>
+        </div>
+
+        <div class="query-result">
+            <h3>Q4: Get latest articles</h3>
+            <pre>SELECT title, date FROM news_articles ORDER BY date DESC LIMIT 3;</pre>
+        </div>
+
+        <div class="query-result">
+            <h3>Q5: Count by feed type</h3>
+            <pre>SELECT feed_type, COUNT(*) FROM news_articles GROUP BY feed_type;</pre>
+            <div class="result">Result: {% for row in queries[3][2] %}{{ row[0] }}: {{ row[1] }} {% endfor %}</div>
+        </div>
+
+        <div class="query-result">
+            <h3>Q6: Find articles with no image</h3>
+            <pre>SELECT COUNT(*) FROM news_articles WHERE image IS NULL OR image = '';</pre>
+        </div>
+
+        <div class="query-result">
+            <h3>Q7: Get articles from a specific date range</h3>
+            <pre>SELECT title, date FROM news_articles 
+WHERE date BETWEEN '2023-09-01' AND '2023-09-08';</pre>
+        </div>
+
+        <h2>🛠️ Database Operations Commands</h2>
+        <div class="query-result">
+            <h3>Connect to database</h3>
+            <pre>sqlite3 news_aggregator.db</pre>
+            
+            <h3>View all tables</h3>
+            <pre>.tables</pre>
+            
+            <h3>View table structure</h3>
+            <pre>.schema news_articles</pre>
+            
+            <h3>Export data to CSV</h3>
+            <pre>.mode csv
+.headers on
+.output news_export.csv
+SELECT * FROM news_articles;
+.output stdout</pre>
+        </div>
+    </div>
+</body>
+</html>

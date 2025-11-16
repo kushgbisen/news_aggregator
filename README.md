@@ -1,6 +1,6 @@
-# News Aggregator
+# Economic Intelligence Platform
 
-Fast news search with SQLite backend.
+Financial news search and analytics with SQLite backend.
 
 ## Start
 
@@ -13,7 +13,7 @@ python3 app.py
 
 ## Database
 
-`news.db` (213,457 articles)
+`news.db` (283,520+ financial articles)
 
 ```sql
 SELECT COUNT(*) FROM news_articles;
@@ -27,12 +27,14 @@ WHERE stocks LIKE '%SBI%' LIMIT 10;
 
 ## Features
 
-- Full-text search
+- Financial news aggregation
+- Stock market intelligence
+- Full-text search in titles/descriptions
 - Feed type filtering
 - Pagination (20/page)
-- Dark theme
+- Dark theme with professional aesthetic
 - Mobile responsive
 
 ---
 
-*kushagra | 2025*
+*Economic Intelligence Platform | 2025*

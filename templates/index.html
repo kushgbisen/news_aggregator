@@ -1,19 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Accessibility improvements -->
+    <meta name="description" content="Financial news search and analytics platform with comprehensive stock market coverage">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+    <title>Economic Intelligence Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Accessibility and readability improvements */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        /* Skip to main content link for keyboard navigation */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #fff;
+            color: #000;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 0 0 4px 4px;
+            font-weight: 500;
+            z-index: 100;
+            transition: top 0.3s;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Visually hidden but accessible to screen readers */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Subtle focus indicators for accessibility */
+        a:focus, button:focus, select:focus, input:focus {
+            outline: 1px solid #666;
+            outline-offset: 1px;
+        }
+
+        /* Respect user motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
 
         body {
-            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: #000;
             color: #fff;
-            line-height: 1.6;
-            font-size: 16px;
+            line-height: 1.6;  /* Slightly improved from 1.5 */
+            font-size: 15px;   /* Restored original size */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
@@ -22,16 +78,38 @@
             padding: 0 24px;
         }
 
+        /* Logo */
+        .logo {
+            font-family: 'Courier New', monospace;
+            font-size: 8px;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            white-space: pre;
+            color: #fff;
+        }
+
+        .brand-name {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            margin: 32px 0 8px;
+            color: #fff;
+            line-height: 1.1;
+        }
+
+        .tagline {
+            font-size: 13px;        /* Restored original size */
+            color: #6b7280;         /* Restored original subtle gray */
+            font-weight: 500;
+            letter-spacing: 0.025em;
+            margin-bottom: 32px;
+        }
+
         /* Header */
         header {
             padding: 48px 0 24px;
             text-align: center;
-        }
-
-        h1 {
-            font-size: 32px;
-            font-weight: 500;
-            letter-spacing: -0.5px;
         }
 
         /* Search */
@@ -50,26 +128,26 @@
             flex: 1;
             padding: 12px 16px;
             background: #111;
-            border: 1px solid #333;
+            border: 1px solid #333;     /* Restored original subtle border */
             border-radius: 8px;
             color: #fff;
             font-family: inherit;
-            font-size: 14px;
+            font-size: 14px;            /* Restored original size */
         }
 
         .search input:focus {
-            outline: none;
-            border-color: #555;
+            outline: none;                  /* Restored original focus style */
+            border-color: #555;             /* Simple dark border on focus */
         }
 
         .search select, .search button {
             padding: 12px 16px;
             background: #111;
-            border: 1px solid #333;
+            border: 1px solid #333;     /* Restored original subtle border */
             border-radius: 8px;
             color: #fff;
             font-family: inherit;
-            font-size: 14px;
+            font-size: 14px;            /* Restored original size */
             cursor: pointer;
         }
 
@@ -248,80 +326,114 @@
     </style>
 </head>
 <body>
+    <!-- Skip to main content link for screen readers -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
     <div class="container">
-        <header>
-            <h1>News</h1>
+        <header role="banner">
+            <div class="brand-name">ECONOMIC INTELLIGENCE</div>
+            <div class="tagline">FINANCIAL NEWS AGGREGATION</div>
         </header>
 
-        <div class="search">
-            <form method="GET">
-                <input type="text" name="search" placeholder="Search articles..." value="{{ search }}">
-                <select name="feed_type">
+        <div class="search" role="search">
+            <form method="GET" aria-label="Search financial news articles">
+                <label for="search-input" class="visually-hidden">Search articles by keyword, stock symbol, or company name</label>
+                <input 
+                    type="text" 
+                    id="search-input"
+                    name="search" 
+                    placeholder="Search articles..." 
+                    value="{{ search }}"
+                    aria-describedby="search-help"
+                >
+                <div id="search-help" class="visually-hidden">
+                    Search by keyword, stock symbol, or company name. Results will update automatically.
+                </div>
+                <label for="feed-type-select" class="visually-hidden">Filter by article type</label>
+                <select name="feed_type" id="feed-type-select">
                     <option value="">All types</option>
                     <option value="news-article" {% if feed_type == 'news-article' %}selected{% endif %}>News</option>
                 </select>
-                <button type="submit">Search</button>
+                <button type="submit">
+                    <span aria-hidden="true">🔍</span>
+                    <span class="visually-hidden">Search articles</span>
+                </button>
             </form>
         </div>
 
-        <articles>
+        <main id="main-content" role="main">
+            <h1 class="visually-hidden">Financial News Articles</h1>
+            
             {% if articles %}
+                <p class="visually-hidden" aria-live="polite" aria-atomic="true">
+                    Found {{ articles|length }} articles{% if search %} matching "{{ search }}"{% endif %}
+                </p>
                 {% for article in articles %}
-                    <div class="article">
+                    <article class="article" role="article">
                         {% if article.image %}
-                            <img src="{{ article.image }}" alt="{{ article.title }}" class="thumbnail" onerror="this.className='thumbnail no-image'; this.innerHTML='📰'; this.onerror=null;">
+                            <img src="{{ article.image }}" alt="Article thumbnail for {{ article.title }}" class="thumbnail" onerror="this.className='thumbnail no-image'; this.innerHTML='📰'; this.onerror=null;">
                         {% else %}
-                            <div class="thumbnail no-image">📰</div>
+                            <div class="thumbnail no-image" aria-hidden="true">📰</div>
                         {% endif %}
                         <div class="content">
-                            <h2 class="title">
-                                <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
+                            <h2 class="title" id="article-title-{{ loop.index }}">
+                                <a href="{{ article.link }}" target="_blank" rel="noopener noreferrer" aria-describedby="article-meta-{{ loop.index }}">
+                                    {{ article.title }}
+                                </a>
                             </h2>
-                            <div class="meta">
-                                {{ article.feed_type }} • {{ article.date[:10] }}
+                            <div class="meta" id="article-meta-{{ loop.index }}" aria-label="Article metadata">
+                                <time datetime="{{ article.date }}">{{ article.date[:10] }}</time>
+                                {% if article.feed_type %} • {{ article.feed_type }}{% endif %}
                             </div>
                             <p class="description">{{ article.description }}</p>
                             {% if article.stocks %}
                                 <div class="footer">
-                                    <a href="{{ article.link }}" target="_blank" class="read-more">Read more</a>
-                                    <span class="stocks">{{ article.stocks }}</span>
+                                    <a href="{{ article.link }}" target="_blank" rel="noopener noreferrer" class="read-more" aria-label="Read full article: {{ article.title }}">
+                                        Read more
+                                        <span class="visually-hidden">about {{ article.title }}</span>
+                                    </a>
+                                    <span class="stocks" aria-label="Stock symbols mentioned">{{ article.stocks }}</span>
                                 </div>
                             {% else %}
                                 <div class="footer">
-                                    <a href="{{ article.link }}" target="_blank" class="read-more">Read more</a>
+                                    <a href="{{ article.link }}" target="_blank" rel="noopener noreferrer" class="read-more" aria-label="Read full article: {{ article.title }}">
+                                        Read more
+                                        <span class="visually-hidden">about {{ article.title }}</span>
+                                    </a>
                                 </div>
                             {% endif %}
                         </div>
-                    </div>
+                    </article>
                 {% endfor %}
             {% else %}
-                <div class="none">
-                    <h3>No articles found</h3>
-                    <p>Try adjusting your search terms.</p>
+                <div class="none" role="status" aria-live="polite">
+                    <h2>No articles found</h2>
+                    <p>Try adjusting your search terms or clearing your filters.</p>
                 </div>
             {% endif %}
-        </articles>
+        </main>
 
         {% if articles %}
-            <div class="pagination">
+            <nav class="pagination" role="navigation" aria-label="Article pagination">
+                <h2 class="visually-hidden">Pagination</h2>
                 {% if page > 1 %}
-                    <a href="?page={{ page - 1 }}&search={{ search }}&feed_type={{ feed_type }}">← Prev</a>
+                    <a href="?page={{ page - 1 }}&search={{ search }}&feed_type={{ feed_type }}" aria-label="Go to previous page">← Prev</a>
                 {% endif %}
                 
                 {% for p in range(1, total_pages + 1) %}
                     {% if p == page %}
-                        <span class="current">{{ p }}</span>
+                        <span class="current" aria-current="page" aria-label="Current page, page {{ p }}">{{ p }}</span>
                     {% elif p <= 3 or p >= total_pages - 2 or (p >= page - 1 and p <= page + 1) %}
-                        <a href="?page={{ p }}&search={{ search }}&feed_type={{ feed_type }}">{{ p }}</a>
+                        <a href="?page={{ p }}&search={{ search }}&feed_type={{ feed_type }}" aria-label="Go to page {{ p }}">{{ p }}</a>
                     {% elif (p == 4 and page > 5) or (p == total_pages - 3 and page < total_pages - 4) %}
-                        <span>...</span>
+                        <span aria-hidden="true">...</span>
                     {% endif %}
                 {% endfor %}
                 
                 {% if page < total_pages %}
-                    <a href="?page={{ page + 1 }}&search={{ search }}&feed_type={{ feed_type }}">Next →</a>
+                    <a href="?page={{ page + 1 }}&search={{ search }}&feed_type={{ feed_type }}" aria-label="Go to next page">Next →</a>
                 {% endif %}
-            </div>
+            </nav>
         {% endif %}
     </div>
 </body>

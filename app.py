@@ -6,13 +6,10 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 def get_db():
-    return sqlite3.connect('news_aggregator.db')
+    return sqlite3.connect('news.db')
 
 def build_query(search='', feed_type=''):
-    """Build article query with filters."""
-    base = "news_articles"
-    params = []
-    conditions = []
+    conditions, params = [], []
     
     if search:
         conditions.append("(title LIKE ? OR description LIKE ?)")
@@ -23,20 +20,22 @@ def build_query(search='', feed_type=''):
         params.append(feed_type)
     
     where = f" WHERE {' AND '.join(conditions)}" if conditions else ""
-    return f"SELECT * FROM {base}{where}", params
+    return f"SELECT * FROM news_articles{where}", params
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def index():
-    db, page, per_page = get_db(), int(request.args.get('page', 1)), 20
-    search, feed_type = request.args.get('search', ''), request.args.get('feed_type', '')
+    page = int(request.args.get('page', 1))
+    search = request.args.get('search', '')
+    feed_type = request.args.get('feed_type', '')
+    per_page = 20
     
-    # Count total articles
-    query, params = build_query(search, feed_type)
-    query = query.replace("SELECT *", "SELECT COUNT(*)")
-    total = db.execute(query, params).fetchone()[0]
+    db = get_db()
     
-    # Get paginated articles
+    # Total count
     query, params = build_query(search, feed_type)
+    total = db.execute(query.replace("SELECT *", "SELECT COUNT(*)"), params).fetchone()[0]
+    
+    # Paginated results
     query += " ORDER BY date DESC LIMIT ? OFFSET ?"
     params.extend([per_page, (page - 1) * per_page])
     
